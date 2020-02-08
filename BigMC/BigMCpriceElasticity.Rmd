@@ -1,0 +1,95 @@
+---
+title: "BigMC"
+author: "Dottie"
+date: "2/7/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+Get an estimated demand curve for Big Macs
+
+```{r}
+BigMCdata = read.csv('BigMCDemandDataSet.csv')
+attach(BigMCdata)
+names(BigMCdata)
+```
+
+Plot the data
+
+```{r}
+plot(demand,price)
+```
+
+x axis = demand
+y axis = price
+
+Fit a demand line to these data.
+
+```{r}
+priceOne = 4.95
+
+model1 = lm(price~demand)
+summary(model1)
+plot(demand,price)
+abline(model1)
+
+abline(h = priceOne, col='red')
+```
+
+lm = linear model
+lm(y axis, x axis)
+
+Price Elasticity is the percent change in quantity demanded divided by the percent change in price.
+
+The marginal revenue (MR) of any product is the additional revenue for sales of one additional Big MC.
+
+It turns out that marginal revenue is related to price elasticity by: 
+
+MR = price * (1 + elasticity)/elasticity
+
+At McDonalds marginal revenue (MR) = marginal cost (MC)
+
+Elasticity of Demand
+E = slope of demand at price P * (price/quantity)
+
+Demand = (price - intercept)/slope
+
+```{r}
+slope = model1$coefficients[2]
+intercept = model1$coefficients[1]
+demanded = (priceOne-intercept)/slope
+
+E = slope*priceOne/demanded
+
+MR = priceOne * abs((1+E)/E)
+
+print(paste('price = ',priceOne))
+print(paste('demanded = ',demanded))
+
+print(paste('elasticity =', round(E,2)))
+print(paste('MR = ', round(MR,2)))
+```
+
+Slope
+y = mx + b
+
+abs = absolute value
+
+MR = $1.41/Big Mac, they make $1.41 for every Big Mac made.
+
+Adding round gets rid of the many numbers after the decimal place.
+
+Profit for Big Mac:
+
+Profit = price - cost = 4.5 - MC
+
+```{r}
+profit = priceOne - MR
+print(paste('profit =', profit))
+```
+
